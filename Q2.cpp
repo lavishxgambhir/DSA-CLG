@@ -1,25 +1,25 @@
 #include <iostream>
 using namespace std;
-int binarySearch(int arr[],int n,int k) {
-    int low=0;
-    int high=n-1;
-    while (low<=high) {
-        int mid=(low+high)/2;
-        if (arr[mid]==k) {
-        	return mid;
-		}
-        else if (arr[mid]>k){
-        	high=mid-1;
-		} 
-        else {
-        	low=mid+1;
-		}
+
+int rmDuplicates(int arr[], int n) {
+    if (n == 0) return 0;
+    int i = 0;
+    for (int j = 1; j < n; j++) {
+        if (arr[j] != arr[i]) {
+            i++;
+            arr[i] = arr[j];
+        }
     }
-    return -1;
+    return i + 1;
 }
+
 int main() {
-    int arr[10]={1,2,3,4,5,6,7,8,9,10};
-    int n=sizeof(arr)/sizeof(arr[0]);
-    cout<<binarySearch(arr,n,5);
+    int arr[] = {1,1,1,1,2,2,2,3,3,5,5,6,6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int ns = rmDuplicates(arr, n);
+    for (int i = 0; i < ns; i++) {
+        cout << arr[i] << " ";
+    }
     return 0;
 }
+
