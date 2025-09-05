@@ -1,86 +1,78 @@
 #include <iostream>
 using namespace std;
 
-
-class CircularQueue {
-    int arr[SIZE];
-    int front, rear;
+class CQueue {
+    int arr[10];
+    int size = 10;
+    int start = -1;
+    int end = -1;
 
 public:
-    CircularQueue() {
-        front = -1;
-        rear = -1;
-    }
-
-    int isEmpty() {
-        if (front == -1) return 1;
-        else return 0;
-    }
-
-    int isFull() {
-        if ((rear + 1) % SIZE == front) return 1;
-        else return 0;
-    }
-
-    void enqueue(int value) {
-        if (isFull()) {
-            cout << "(Queue is FULL)" << endl;
-            return;
+    void push(int x) {
+        if ((start == 0 && end == size - 1) || (end + 1) % size == start) {
+            cout << "Queue Full!" << endl;
+        } else {
+            if (start == -1) {
+                start = 0;
+                end = 0;
+            } else {
+                end = (end + 1) % size;
+            }
+            arr[end] = x;
         }
-        if (isEmpty()) front = 0;
-        rear = (rear + 1) % SIZE;
-        arr[rear] = value;
-        cout << "(" << value << " enqueued)" << endl;
     }
 
-    void dequeue() {
+    void pop() {
         if (isEmpty()) {
-            cout << "(Queue is EMPTY)" << endl;
-            return;
+            cout << "Queue Empty!" << endl;
+        } else if (start == end) {
+            start = -1;
+            end = -1;
+        } else {
+            start = (start + 1) % size;
         }
-        cout << "(" << arr[front] << " dequeued)" << endl;
-        if (front == rear) front = rear = -1;
-        else front = (front + 1) % SIZE;
     }
 
-    void peek() {
-        if (isEmpty()) cout << "(Queue is EMPTY)" << endl;
-        else cout << "(Front: " << arr[front] << ")" << endl;
+    bool isEmpty() {
+        return start == -1;
+    }
+
+    bool isFull() {
+        return (start == 0 && end == size - 1) || (end + 1) % size == start;
+    }
+
+    int peek() {
+        if (isEmpty()) {
+            cout << "Queue Empty!" << endl;
+            return -1;
+        }
+        return arr[start];
     }
 
     void display() {
         if (isEmpty()) {
-            cout << "(Queue is EMPTY)" << endl;
-            return;
+            cout << "Queue Empty!" << endl;
+        } else {
+            int i = start;
+            while (true) {
+                cout << arr[i] << " ";
+                if (i == end) break;
+                i = (i + 1) % size;
+            }
+            cout << endl;
         }
-        cout << "(Queue: ";
-        int i = front;
-        while (true) {
-            cout << arr[i] << " ";
-            if (i == rear) break;
-            i = (i + 1) % SIZE;
-        }
-        cout << ")" << endl;
     }
 };
 
 int main() {
-    CircularQueue q;
-    int choice, val;
-    do {
-        cout << "\n1.Enqueue 2.Dequeue 3.Peek 4.Display 5.Check Empty 6.Check Full 0.Exit\nEnter choice: ";
-        cin >> choice;
-        switch(choice) {
-            case 1: cin >> val; q.enqueue(val); break;
-            case 2: q.dequeue(); break;
-            case 3: q.peek(); break;
-            case 4: q.display(); break;
-            case 5: cout << (q.isEmpty() ? "(Queue is EMPTY)" : "(Queue is NOT empty)") << endl; break;
-            case 6: cout << (q.isFull() ? "(Queue is FULL)" : "(Queue is NOT full)") << endl; break;
-            case 0: cout << "(Exit)" << endl; break;
-            default: cout << "(Invalid)" << endl;
-        }
-    } while(choice != 0);
+    CQueue q;
+    q.push(10);
+    q.push(20);
+    q.push(30);
+    q.display();
+    cout << "Peek: " << q.peek() << endl;
+    q.pop();
+    q.display();
+    cout << "Peek: " << q.peek() << endl;
+    return 0;
 }
-
-
